@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApiLecture.Data.Models.Entities;
 using WebApiLecture.Domain.Repositories.Interfaces;
 
@@ -6,6 +7,7 @@ namespace WebApiLecture.Api.Controllers.VersionTwo
 {
     [ApiController]
     [Route("v2/[controller]")]
+    [Authorize]
     public class TodoItemController : ControllerBase
     {
         private readonly ITodoItemRepository _todoItemRepository;

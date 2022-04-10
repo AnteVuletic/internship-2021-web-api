@@ -1,0 +1,33 @@
+@use "sass:map";
+@import "../../styles/_variables";
+
+.list {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid map-get($colors, "black");
+  width: 100%;
+}
+
+.header {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 1px solid map-get($colors, "black");
+
+  & > .column {
+    flex-basis: 15%;
+    border-left: 1px solid map-get($colors, "black");
+
+    &:not(:first-of-type) {
+      margin-left: 8px;
+    }
+
+    &:last-of-type {
+      border-right: 1px solid map-get($colors, "black");
+    }
+  }
+}
+
+.body {
+  
+}

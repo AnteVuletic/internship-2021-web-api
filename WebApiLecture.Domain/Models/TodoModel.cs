@@ -20,18 +20,20 @@ namespace WebApiLecture.Domain.Models
 
     public static class TodoModelExtensions
     {
-        public static void MapToTodo(this TodoModel model, Todo todo)
+        public static void MapToTodo(this TodoModel model, Todo todo, int userId)
         {
             todo.Title = model.Title;
             todo.Description = model.Description;
+            todo.UserId = userId;
         }
 
-        public static Todo ProjectToTodo(this TodoModel model)
+        public static Todo ProjectToTodo(this TodoModel model, int userId)
         {
             return new Todo
             {
                 Title = model.Title,
-                Description = model.Description
+                Description = model.Description,
+                UserId = userId
             };
         }
 

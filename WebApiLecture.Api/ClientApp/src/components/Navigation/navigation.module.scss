@@ -1,0 +1,16 @@
+@use "sass:map";
+@import "../../styles/_variables";
+
+.navigation {
+  display: flex;
+  align-items: center;
+  background-color: map-get($colors, "primary");
+  padding: 8px;
+  margin: 0;
+  position: sticky;
+  color: map-get($colors, "primary-text");
+
+  > li {
+    list-style-type: none;
+  }
+}

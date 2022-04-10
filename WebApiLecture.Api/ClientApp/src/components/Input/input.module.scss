@@ -1,0 +1,25 @@
+@use "sass:map";
+@import "../../styles/_variables";
+
+.wrapper {
+  width: 100%;
+}
+
+.input {
+  display: block;
+  border-radius: 8px;
+  border-width: 1px;
+  font-size: 18px;
+  width: 100%;
+
+  &--error {
+    border-color: map-get($colors, "danger");
+  }
+}
+
+.error {
+  color: map-get($colors, "danger");
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 4px;
+}

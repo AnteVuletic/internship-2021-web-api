@@ -1,0 +1,22 @@
+@use "sass:map";
+@import "../../styles/_variables";
+
+.action {
+  margin-top: 8px;
+  border-width: 0;
+  padding: 8px 14px;
+  font-size: 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+
+  &.action--primary {
+    color: map-get($colors, "primary-text");
+    background-color: map-get($colors, "primary");
+  }
+
+  &.action--info {
+    color: map-get($colors, "info");
+  }
+}

@@ -1,0 +1,14 @@
+@use "sass:map";
+@import "../../styles/variables";
+
+.label {
+  color: map-get($colors, "black");
+  display: block;
+  margin: 8px 0px;
+  font-size: 18px;
+}
+
+.astrix {
+  color: map-get($colors, "danger");
+  font-weight: 600;
+}
