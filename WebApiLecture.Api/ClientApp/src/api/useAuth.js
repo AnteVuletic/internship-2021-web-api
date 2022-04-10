@@ -1,13 +1,5 @@
 import { useFetch } from "src/hooks/useFetch";
 
-export const useLogin = () => {
-  const { post } = useFetch("/api/Auth/login");
+export const useLogin = () => (useFetch("/api/Auth/login", 'POST'));
 
-  return { login: post };
-};
-
-export const useRegister = () => {
-  const { post } = useFetch("/api/Auth/register");
-
-  return { register: post };
-};
+export const useRegister = () => (useFetch("/api/Auth/register", 'POST'));

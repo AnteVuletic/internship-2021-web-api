@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { useLogin } from "src/api/useAuth";
 import Action from "src/components/Action";
 
 import ControlledInput from "src/components/Input/Controlled";
+import Loader from "src/components/Loader";
 
 import { UserContext } from "src/providers/UserProvider";
 import { InputName, schema } from "./consts";
@@ -12,11 +12,8 @@ import { InputName, schema } from "./consts";
 import styles from "./login-form.module.scss";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
   const { updateToken } = useContext(UserContext);
-  const { login } = useLogin();
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const { handleRequest, data, error, isLoading, isSuccessful } = useLogin();
 
   const {
     handleSubmit,
@@ -27,25 +24,20 @@ const LoginForm = () => {
     mode: "onChange",
   });
 
-  const onSubmit = async (formValue) => {
-    try {
-      const response = await login(formValue);
-      setError(null);
-      setSuccess("Successfully logged in");
-      console.log(response);
-      
+  useEffect(() => {
+    if (isSuccessful) {
       setTimeout(() => {
-        updateToken(response.token);
-        navigate("/");
-      }, 1000);
-    } catch {
-      setSuccess(null);
-      setError("Invalid credentials");
+        updateToken(data.token);
+      }, 2000);
     }
-  };
+  }, [isSuccessful, updateToken, data]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <form onSubmit={handleSubmit(handleRequest)} className={styles.form}>
       <ControlledInput
         inputName={InputName.email}
         rules={schema[InputName.email]}
@@ -62,7 +54,7 @@ const LoginForm = () => {
         inputType="password"
       />
       {error && <span className="error">{error}</span>}
-      {success && <span className="success">{success}</span>}
+      {isSuccessful && <span className="success">Success!</span>}
       <div className={styles.actions}>
         <Action variant="info" renderAs="Link" props={{ to: "/register" }}>
           Register

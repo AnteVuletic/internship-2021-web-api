@@ -43,7 +43,10 @@ namespace WebApiLecture.Domain.Services
 
         public JwtModel? DecodeToken(string token)
         {
-            var decodedToken = JWT.Decode(token, Encoding.UTF8.GetBytes(_jwtConfiguration.Audience));
+            if (token == "" || token == null)
+                return null;
+
+            var decodedToken = JWT.Decode(token, Encoding.UTF8.GetBytes(_jwtConfiguration.AudienceSecret));
             var jwtModel = JsonSerializer.Deserialize<JwtModel>(decodedToken);
 
             return jwtModel;

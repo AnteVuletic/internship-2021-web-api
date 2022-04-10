@@ -6,7 +6,7 @@ using WebApiLecture.Domain.Repositories.Interfaces;
 namespace WebApiLecture.Api.Controllers.VersionFour
 {
     [ApiController]
-    [Route("v4/[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class TodoItemController : ControllerBase
     {

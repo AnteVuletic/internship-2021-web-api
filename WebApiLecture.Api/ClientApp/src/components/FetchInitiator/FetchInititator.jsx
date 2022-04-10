@@ -14,13 +14,14 @@ const FetchInitiator = () => {
   useEffect(() => {
     window.fetch = async (...args) => {
       let [resource, config] = args;
-      if (token) {
-        config.headers.Authorize = `Bearer ${token}`;
-      }
 
       const response = await originalFetch(resource, config);
       if (response.ok) {
-        return await response.json();
+        try {
+          return await response.json();
+        } catch {
+          return {};
+        }
       }
 
       if (response.status === 401) {
@@ -29,7 +30,9 @@ const FetchInitiator = () => {
 
       throw new Error(response?.message || "Oops something went wrong");
     };
-  }, [token, logOut, updateToken]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <></>;
 };

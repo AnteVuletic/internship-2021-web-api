@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 import Todo from "./pages/Todo";
+import AddTodo from "./pages/Todo/AddTodo";
 
 import { UserContext } from "./providers/UserProvider";
 
@@ -21,7 +22,8 @@ const Routes = () => {
   const application = (
     <Route path="/" element={<Layout />}>
       <Route path="/" element={<Todo />} />
-      <Route path="/Todos" element={<Todo />} />
+      <Route path="/todos/add" element={<AddTodo />} />
+      <Route path="/todos" element={<Todo />} />
     </Route>
   );
 

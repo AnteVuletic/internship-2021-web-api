@@ -18,12 +18,17 @@ const List = ({ columns, rows, error }) => {
       </div>
       <div className={styles.body}>
         {rows.map((elements, index) => (
-          <div key={index}>
+          <div key={index} className={styles.row}>
             {elements.map((element, elementIndex) => (
-              <element key={elementIndex} />
+              <div className={styles.cell} key={elementIndex}>
+                {element}
+              </div>
             ))}
           </div>
         ))}
+        {!rows.length && (
+          <span className={styles.empty}>Empty result (╯°□°）╯︵ ┻━┻</span>
+        )}
       </div>
     </div>
   );

@@ -24,7 +24,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<JwtService>();
 builder.Services.AddScoped<UserProviderService>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters

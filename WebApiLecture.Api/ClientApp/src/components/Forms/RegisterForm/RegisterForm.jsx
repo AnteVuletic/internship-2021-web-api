@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "src/api/useAuth";
 import Action from "src/components/Action";
 
 import ControlledInput from "src/components/Input/Controlled";
+import Loader from "src/components/Loader";
 
 import { InputName, schema } from "./consts";
 
@@ -12,9 +13,7 @@ import styles from "./register-form.module.scss";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-  const { register } = useRegister();
-  const [error, setError] = useState(null);
-  const [success, setSuccessMessage] = useState(null);
+  const { handleRequest, error, isLoading, isSuccessful } = useRegister();
   const {
     control,
     handleSubmit,
@@ -25,19 +24,17 @@ const RegisterForm = () => {
     mode: "onChange",
   });
 
-  const onSubmit = async (formValue) => {
-    try {
-      await register(formValue);
-      setError(null);
-
+  useEffect(() => {
+    if (isSuccessful) {
       setTimeout(() => {
         navigate("/");
-      }, 1000);
-    } catch {
-      setError("Invalid registration request");
-      setSuccessMessage(null);
+      }, 2000);
     }
-  };
+  }, [isSuccessful, navigate]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const passwordMatchValidate = {
     validate: (value) =>
@@ -45,7 +42,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <form onSubmit={handleSubmit(handleRequest)} className={styles.form}>
       <ControlledInput
         inputName={InputName.email}
         rules={schema[InputName.email]}
@@ -70,7 +67,9 @@ const RegisterForm = () => {
         inputType="password"
       />
       {error && <span className="error">{error}</span>}
-      {success && <span className="success">{success}</span>}
+      {isSuccessful && (
+        <span className="success">Successfully registered!</span>
+      )}
       <div className={styles.actions}>
         <Action variant="info" renderAs="Link" props={{ to: "/" }}>
           Login

@@ -4,8 +4,9 @@
 .list {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   border: 1px solid map-get($colors, "black");
-  width: 100%;
+  width: calc(100% - 2px);
 }
 
 .header {
@@ -13,12 +14,13 @@
   display: flex;
   justify-content: flex-start;
   border-bottom: 1px solid map-get($colors, "black");
+  font-weight: 600;
 
   & > .column {
     flex-basis: 15%;
-    border-left: 1px solid map-get($colors, "black");
 
     &:not(:first-of-type) {
+      border-left: 1px solid map-get($colors, "black");
       margin-left: 8px;
     }
 
@@ -29,5 +31,31 @@
 }
 
 .body {
-  
+  flex-basis: 100%;
+
+  & .row {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  & .cell {
+    flex-basis: 15%;
+
+    &:not(:first-of-type) {
+      border-left: 1px solid map-get($colors, "black");
+      margin-left: 8px;
+    }
+
+    &:last-of-type {
+      border-right: 1px solid map-get($colors, "black");
+    }
+  }
+}
+
+.empty {
+  display: block;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
 }

@@ -15,7 +15,7 @@ namespace WebApiLecture.Domain.Services
 
         public int GetUserId()
         {
-            var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer", "");
+            var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             return _jwtService.GetUserIdFromToken(token);
         }
     }
