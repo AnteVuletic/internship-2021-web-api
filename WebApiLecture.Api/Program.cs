@@ -35,7 +35,8 @@ builder.Services
             ValidateAudience = true,
             ValidAudience = jwtConfiguration.Audience,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.AudienceSecret))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.AudienceSecret)),
+            ClockSkew = TimeSpan.Zero
         };
     });
 
