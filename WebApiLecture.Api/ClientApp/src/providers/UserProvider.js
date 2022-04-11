@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 import { parseJwt } from "src/utils/token";
 
-const TOKEN_LOCALSTORAGE_KEY = "token";
+export const TOKEN_LOCALSTORAGE_KEY = "token";
 
 const initialState = {
   token: null,
