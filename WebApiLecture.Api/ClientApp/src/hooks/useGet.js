@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo } from "react";
+import { useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { UserContext } from "src/providers/UserProvider";
 import { constructGet } from "src/utils/fetch";
 
@@ -10,6 +10,7 @@ export const useGet = (endpoint, headerOptions) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [reloadTrigger, setReloadTrigger] = useState(0);
 
   const options = useMemo(() => {
     let headers = {};
@@ -51,7 +52,11 @@ export const useGet = (endpoint, headerOptions) => {
     return () => {
       abortController.abort();
     };
-  }, [endpoint, options]);
+  }, [endpoint, options, reloadTrigger]);
 
-  return { data, error, isLoading };
+  const handleReloadTrigger = useCallback(() => {
+    setReloadTrigger((prev) => prev + 1);
+  }, []);
+
+  return { data, error, isLoading, triggerReload: handleReloadTrigger };
 };

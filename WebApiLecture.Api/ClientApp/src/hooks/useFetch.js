@@ -31,19 +31,20 @@ export const useFetch = (endpoint, method = "GET", headerOptions) => {
 
   const requestFactoryDictionary = useMemo(
     () => ({
-      GET: constructGet(endpoint, options),
-      POST: constructPost(endpoint, options),
-      DELETE: constructDelete(endpoint, options),
-      PUT: constructPut(endpoint, options),
+      GET: (append = "") => constructGet(endpoint + append, options),
+      POST: (append = "") => constructPost(endpoint + append, options),
+      DELETE: (append = "") => constructDelete(endpoint + append, options),
+      PUT: (append = "") => constructPut(endpoint + append, options),
     }),
     [endpoint, options]
   );
 
   const handleRequest = useCallback(
-    async (value) => {
+    async (value, append = "") => {
+      const postfix = typeof append === "string" ? append : "";
       setIsLoading(true);
       try {
-        const request = requestFactoryDictionary[method];
+        const request = requestFactoryDictionary[method](postfix);
         const response = await request(value);
         setData(response);
         setIsSuccessful(true);
@@ -58,5 +59,12 @@ export const useFetch = (endpoint, method = "GET", headerOptions) => {
     [method, requestFactoryDictionary]
   );
 
-  return { handleRequest, data, error, isLoading, isSuccessful };
+  const reset = useCallback(() => {
+    setData(null);
+    setError(null);
+    setIsLoading(false);
+    setIsSuccessful(false);
+  }, []);
+
+  return { handleRequest, reset, data, error, isLoading, isSuccessful };
 };

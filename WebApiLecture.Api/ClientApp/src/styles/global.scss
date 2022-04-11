@@ -17,7 +17,7 @@ body {
 }
 
 .success {
-  color: map-get($colors, "success");
+  color: map-get($colors, "success-text");
   font-size: 14px;
   font-weight: 600;
   margin-top: 4px;

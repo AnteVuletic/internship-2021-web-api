@@ -14,6 +14,7 @@ const Action = ({
     type: null,
     to: null,
     href: null,
+    onClick: null,
   },
 }) => {
   const TagElement = renderAs === "Link" ? Link : renderAs;

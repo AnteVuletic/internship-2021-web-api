@@ -17,11 +17,14 @@
   font-weight: 600;
 
   & > .column {
-    flex-basis: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 15%;
+    height: 40px;
 
     &:not(:first-of-type) {
       border-left: 1px solid map-get($colors, "black");
-      margin-left: 8px;
     }
 
     &:last-of-type {
@@ -36,14 +39,18 @@
   & .row {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
   }
 
   & .cell {
-    flex-basis: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 15%;
+    height: 50px;
 
     &:not(:first-of-type) {
       border-left: 1px solid map-get($colors, "black");
-      margin-left: 8px;
     }
 
     &:last-of-type {
