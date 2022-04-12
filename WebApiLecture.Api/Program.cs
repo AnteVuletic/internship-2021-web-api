@@ -1,17 +1,44 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 using WebApiLecture.Data.Models;
+using WebApiLecture.Domain.Configurations;
 using WebApiLecture.Domain.Repositories.Implementations;
 using WebApiLecture.Domain.Repositories.Interfaces;
+using WebApiLecture.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var webApilectureContext = builder.Configuration.GetConnectionString(nameof(WebApiLectureContext));
+var jwtConfiguration = builder.Configuration.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<WebApiLectureContext>(options => options.UseSqlServer(webApilectureContext));
+builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(nameof(JwtConfiguration)));
 builder.Services.AddTransient<ITodoItemRepository, TodoItemRepository>();
 builder.Services.AddTransient<ITodoRepository, TodoRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<JwtService>();
+builder.Services.AddScoped<UserProviderService>();
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtConfiguration.Issuer,
+            ValidateAudience = true,
+            ValidAudience = jwtConfiguration.Audience,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.AudienceSecret)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -43,6 +70,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

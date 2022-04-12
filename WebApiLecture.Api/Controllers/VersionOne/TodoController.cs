@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiLecture.Data.Models;
 using WebApiLecture.Data.Models.Entities;
@@ -7,6 +8,7 @@ namespace WebApiLecture.Api.Controllers.VersionOne
 {
     [ApiController]
     [Route("v1/[controller]")]
+    [Authorize]
     public class TodoController : ControllerBase
     {
         private readonly WebApiLectureContext _webApiLectureContext;

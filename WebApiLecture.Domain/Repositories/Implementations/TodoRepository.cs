@@ -3,16 +3,19 @@ using WebApiLecture.Data.Models;
 using WebApiLecture.Data.Models.Entities;
 using WebApiLecture.Domain.Models;
 using WebApiLecture.Domain.Repositories.Interfaces;
+using WebApiLecture.Domain.Services;
 
 namespace WebApiLecture.Domain.Repositories.Implementations
 {
     public class TodoRepository : ITodoRepository
     {
         private readonly WebApiLectureContext _webApiLectureContext;
+        private readonly UserProviderService _userProviderService;
 
-        public TodoRepository(WebApiLectureContext webApiLectureContext)
+        public TodoRepository(WebApiLectureContext webApiLectureContext, UserProviderService userProviderService)
         {
             _webApiLectureContext = webApiLectureContext;
+            _userProviderService = userProviderService;
         }
 
         public void AddTodo(Todo model)
@@ -23,14 +26,14 @@ namespace WebApiLecture.Domain.Repositories.Implementations
 
         public void AddTodo(TodoModel model)
         {
-            var todo = model.ProjectToTodo();
+            var todo = model.ProjectToTodo(_userProviderService.GetUserId());
             _webApiLectureContext.Todos.Add(todo);
             _webApiLectureContext.SaveChanges();
         }
 
         public async Task AddTodoAsync(TodoModel model)
         {
-            var todo = model.ProjectToTodo();
+            var todo = model.ProjectToTodo(_userProviderService.GetUserId());
             await _webApiLectureContext.Todos.AddAsync(todo);
             await _webApiLectureContext.SaveChangesAsync();
         }
@@ -138,7 +141,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
                 return false;
             }
 
-            model.MapToTodo(todo);
+            model.MapToTodo(todo, _userProviderService.GetUserId());
             _webApiLectureContext.SaveChanges();
 
             return true;
@@ -155,7 +158,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
                 return false;
             }
 
-            model.MapToTodo(todo);
+            model.MapToTodo(todo, _userProviderService.GetUserId());
             await _webApiLectureContext.SaveChangesAsync();
 
             return true;
@@ -219,6 +222,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
         {
             var todoModels = _webApiLectureContext
                 .Todos
+                .Where(t => t.UserId == _userProviderService.GetUserId())
                 .ProjectToResponseModel()
                 .ToList();
 
@@ -229,6 +233,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
         {
             var todoModels = await _webApiLectureContext
                 .Todos
+                .Where(t => t.UserId == _userProviderService.GetUserId())
                 .ProjectToResponseModel()
                 .ToListAsync();
 
@@ -239,6 +244,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
         {
             var todo = _webApiLectureContext
                 .Todos
+                .Where(t => t.UserId == _userProviderService.GetUserId())
                 .Include(todo => todo.Items)
                 .FirstOrDefault(todo => todo.Id == id);
 
@@ -259,6 +265,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
         {
             var todoDetail = _webApiLectureContext
                 .Todos
+                .Where(t => t.UserId == _userProviderService.GetUserId())
                 .ProjectToDetailResponse()
                 .FirstOrDefault(todo => todo.Id == id);
 
@@ -274,6 +281,7 @@ namespace WebApiLecture.Domain.Repositories.Implementations
         {
             var todoDetail = await _webApiLectureContext
                 .Todos
+                .Where(t => t.UserId == _userProviderService.GetUserId())
                 .ProjectToDetailResponse()
                 .FirstOrDefaultAsync(todo => todo.Id == id);
 

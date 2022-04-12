@@ -35,7 +35,12 @@ namespace WebApiLecture.Data.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Todos");
                 });
@@ -64,6 +69,40 @@ namespace WebApiLecture.Data.Migrations
                     b.ToTable("TodoItems");
                 });
 
+            modelBuilder.Entity("WebApiLecture.Data.Models.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("WebApiLecture.Data.Models.Entities.Todo", b =>
+                {
+                    b.HasOne("WebApiLecture.Data.Models.Entities.User", "User")
+                        .WithMany("Todos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebApiLecture.Data.Models.Entities.TodoItem", b =>
                 {
                     b.HasOne("WebApiLecture.Data.Models.Entities.Todo", "Todo")
@@ -78,6 +117,11 @@ namespace WebApiLecture.Data.Migrations
             modelBuilder.Entity("WebApiLecture.Data.Models.Entities.Todo", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("WebApiLecture.Data.Models.Entities.User", b =>
+                {
+                    b.Navigation("Todos");
                 });
 #pragma warning restore 612, 618
         }
